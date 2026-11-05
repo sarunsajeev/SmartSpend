@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ section.title }} · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">SMARTSPEND</span><h2>{{ section.title }}</h2><p>{{ section.description }}</p></div></section>
+<section class="panel section-panel">
+    {% if section_key == 'settings' %}
+        <span class="summary-icon icon-purple"><svg class="icon"><use href="#icon-settings"></use></svg></span>
+        <div class="settings-details"><div><span>Username</span><strong>{{ request.user.username }}</strong></div><div><span>Email address</span><strong>{{ request.user.email|default:'Not provided' }}</strong></div><div><span>Account role</span><strong>{% if request.user.is_staff %}Staff{% else %}Personal account{% endif %}</strong></div></div>
+    {% else %}
+        <span class="summary-icon icon-blue"><svg class="icon"><use href="#icon-{{ section.icon }}"></use></svg></span>
+        <div class="section-panel-copy"><h3>{{ section.title }}</h3><p>{{ section.description }}</p><a class="text-link" href="{% url 'dashboard:home' %}">Return to dashboard <svg class="icon"><use href="#icon-arrow"></use></svg></a></div>
+    {% endif %}
+</section>
+{% endblock %}

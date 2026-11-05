@@ -1,0 +1,12 @@
+# Python bytecode and local virtual environment
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local database and secrets
+db.sqlite3
+.env
+
+# Generated/static build output and editor files
+staticfiles/
+.idea/

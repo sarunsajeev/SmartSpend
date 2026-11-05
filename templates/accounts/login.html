@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign in · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="login-card">
+    <a class="brand login-brand" href="{% url 'accounts:login' %}"><span class="brand-mark"><svg class="icon"><use href="#icon-mark"></use></svg></span><span class="brand-copy"><strong>SmartSpend</strong><small>PERSONAL FINANCE</small></span></a>
+    <span class="section-kicker">WELCOME BACK</span><h1>Sign in to your account</h1><p class="login-intro">Your personal finance overview is one step away.</p>
+    {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+    <form method="post" class="login-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <div class="form-field"><label for="id_username">Username</label>{{ form.username }}{% for error in form.username.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+        <div class="form-field"><label for="id_password">Password</label>{{ form.password }}{% for error in form.password.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+        <button class="button button-primary login-submit" type="submit">Sign in</button>
+    </form>
+    <p class="login-footnote">New to SmartSpend? <a href="{% url 'accounts:register' %}">Create an account</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete category · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">CONFIRM CHANGE</span><h2>Delete category</h2><p>A category used by a transaction cannot be removed, so your history stays intact.</p></div></section>
+<section class="panel confirm-panel"><span class="summary-icon icon-amber"><svg class="icon"><use href="#icon-help"></use></svg></span><h3>{{ category.name }}</h3><p>{{ category.get_kind_display }} category</p><form method="post" class="form-actions">{% csrf_token %}<a class="button button-secondary" href="{% url 'transactions:categories' %}">Cancel</a><button class="button button-danger" type="submit">Delete category</button></form></section>
+{% endblock %}

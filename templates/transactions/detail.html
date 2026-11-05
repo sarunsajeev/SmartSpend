@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load smartspend %}
+
+{% block title %}Transaction details · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">{{ transaction.get_kind_display|upper }}</span><h2>Transaction details</h2><p>Review the record saved to your account.</p></div><div class="transaction-actions"><a class="button button-secondary" href="{% url 'transactions:update' transaction.pk %}">Edit</a><a class="button button-danger-soft" href="{% url 'transactions:delete' transaction.pk %}">Delete</a></div></section>
+<section class="panel detail-panel">
+    <div class="detail-amount {% if transaction.kind == 'expense' %}amount-expense{% else %}amount-investment{% endif %}">{% if transaction.kind == 'expense' %}−{% elif transaction.kind == 'income' %}+{% endif %}{{ transaction.amount|inr }}</div>
+    <div class="profile-detail-list">
+        <div><span>Type</span><strong>{{ transaction.get_kind_display }}</strong></div>
+        <div><span>Description</span><strong>{{ transaction.description|default:'—' }}</strong></div>
+        <div><span>Category</span><strong>{{ transaction.category.name|default:'Uncategorized' }}</strong></div>
+        <div><span>Subcategory</span><strong>{{ transaction.subcategory|default:'—' }}</strong></div>
+        <div><span>Date</span><strong>{{ transaction.date|date:'j F Y' }}</strong></div>
+        <div><span>Payment method</span><strong>{{ transaction.get_payment_method_display|default:'—' }}</strong></div>
+    </div>
+</section>
+{% endblock %}

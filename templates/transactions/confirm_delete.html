@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete transaction · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">CONFIRM CHANGE</span><h2>Delete transaction</h2><p>This action removes the record from your history and updates your dashboard totals.</p></div></section>
+<section class="panel confirm-panel"><span class="summary-icon icon-amber"><svg class="icon"><use href="#icon-help"></use></svg></span><h3>{{ transaction.description|default:transaction.get_kind_display }}</h3><p>{{ transaction.get_kind_display }} · {{ transaction.date|date:'j M Y' }} · {{ transaction.amount }}</p><form method="post" class="form-actions">{% csrf_token %}<a class="button button-secondary" href="{% url 'transactions:detail' transaction.pk %}">Keep transaction</a><button class="button button-danger" type="submit">Delete transaction</button></form></section>
+{% endblock %}

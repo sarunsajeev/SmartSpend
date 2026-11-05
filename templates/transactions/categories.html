@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Categories · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">ORGANIZATION</span><h2>Categories</h2><p>Your default and custom categories are private to your account.</p></div><a class="button button-primary" href="{% url 'transactions:category_create' %}">Add category</a></section>
+<section class="panel list-panel">
+    <div class="panel-heading panel-heading-row list-panel-heading"><div><span class="section-kicker">YOUR LABELS</span><h2>Manage categories</h2><p>Categories used by transactions can be renamed, but their type stays fixed.</p></div><span class="record-count">{{ categories|length }} category{{ categories|length|pluralize }}</span></div>
+    {% if categories %}
+        <div class="table-scroll"><table class="spend-table full-table"><thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Transactions</th><th scope="col">Actions</th></tr></thead><tbody>
+            {% for category in categories %}<tr><td><span class="transaction-name">{{ category.name }}</span></td><td><span class="type-pill type-{{ category.kind }}">{{ category.get_kind_display }}</span></td><td>{{ category.transaction_count }}</td><td class="row-actions"><a class="row-action" href="{% url 'transactions:category_update' category.pk %}">Edit</a><a class="row-action row-action-danger" href="{% url 'transactions:category_delete' category.pk %}">Delete</a></td></tr>{% endfor %}
+        </tbody></table></div>
+    {% else %}<div class="large-empty-state"><span class="empty-icon empty-icon-large"><svg class="icon"><use href="#icon-receipt"></use></svg></span><h3>No categories yet</h3><p>Create a category to organize income, expenses, or investments.</p><a class="button button-primary" href="{% url 'transactions:category_create' %}">Add category</a></div>{% endif %}
+</section>
+{% endblock %}

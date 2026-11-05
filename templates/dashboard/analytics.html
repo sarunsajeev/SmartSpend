@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static smartspend %}
+
+{% block title %}Analytics · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">YOUR SPENDING PATTERNS</span><h2>Analytics</h2><p>Explore your recorded expenses by month and category.</p></div><a class="button button-secondary" href="{% url 'dashboard:home' %}">Back to overview</a></section>
+<section class="summary-grid analytics-summary">
+    <article class="summary-card balance-card"><div class="summary-card-top"><span class="summary-icon icon-blue"><svg class="icon"><use href="#icon-receipt"></use></svg></span><span class="summary-label">This month</span></div><strong class="summary-value">{{ monthly_expenses|inr }}</strong><p class="summary-note">Recorded expenses in {{ month_label }}</p></article>
+    <article class="summary-card goals-card"><div class="summary-card-top"><span class="summary-icon icon-purple"><svg class="icon"><use href="#icon-chart"></use></svg></span><span class="summary-label">Active goals</span></div><strong class="summary-value">{{ goal_count }}</strong><p class="summary-note">Current goals in your account</p></article>
+</section>
+{% include 'dashboard/_charts.html' %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/charts.js' %}" defer></script>
+{% endblock %}

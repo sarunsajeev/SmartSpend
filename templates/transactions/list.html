@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load smartspend %}
+
+{% block title %}{{ page_title }} · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro transaction-intro">
+    <div><span class="section-kicker">YOUR RECORDS</span><h2>{{ page_title }}</h2><p>Search and review financial records saved to your account.</p></div>
+    <div class="transaction-actions"><a class="button button-secondary" href="{% url 'transactions:categories' %}">Manage categories</a><a class="button button-soft" href="{% url 'transactions:income_create' %}">Add income</a><a class="button button-primary" href="{% url 'transactions:expense_create' %}">Add expense</a></div>
+</section>
+
+<nav class="transaction-tabs" aria-label="Transaction type">
+    <a class="{% if page_title == 'All transactions' %}active{% endif %}" href="{% url 'transactions:all' %}">All transactions</a>
+    <a class="{% if page_title == 'All Expenses' %}active{% endif %}" href="{% url 'transactions:list' %}">Expenses</a>
+    <a class="{% if page_title == 'Income' %}active{% endif %}" href="{% url 'transactions:income' %}">Income</a>
+    <a class="{% if page_title == 'Investments' %}active{% endif %}" href="{% url 'transactions:investments' %}">Investments</a>
+</nav>
+
+<section class="panel list-panel">
+    <div class="panel-heading panel-heading-row list-panel-heading">
+        <div><span class="section-kicker">ACTIVITY</span><h2>{{ page_title }}</h2><p>Only records belonging to your account are shown.</p></div>
+        <span class="record-count">{{ page_obj.paginator.count }} record{{ page_obj.paginator.count|pluralize }}</span>
+    </div>
+
+    <form class="transaction-filters" action="{{ request.path }}" method="get">
+        <div class="filter-field search-filter"><label for="id_q">Search</label>{{ filter_form.q }}</div>
+        {% if not fixed_kind %}<div class="filter-field"><label for="id_kind">Type</label>{{ filter_form.kind }}</div>{% endif %}
+        <div class="filter-field"><label for="id_category">Category</label>{{ filter_form.category }}</div>
+        <div class="filter-field"><label for="id_date_from">From</label>{{ filter_form.date_from }}</div>
+        <div class="filter-field"><label for="id_date_to">To</label>{{ filter_form.date_to }}{% for error in filter_form.date_to.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+        <div class="filter-field"><label for="id_sort">Sort by</label>{{ filter_form.sort }}</div>
+        <div class="filter-actions"><button class="button button-primary" type="submit">Apply filters</button><a class="text-link" href="{{ request.path }}">Clear</a></div>
+    </form>
+
+    {% if transactions %}
+        <div class="table-scroll">
+            <table class="spend-table full-table">
+                <thead><tr><th scope="col">Description</th><th scope="col">Type</th><th scope="col">Category</th><th scope="col">Subcategory</th><th scope="col">Date</th><th scope="col">Mode</th><th scope="col" class="amount-column">Amount</th><th scope="col">Details</th></tr></thead>
+                <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td><a class="transaction-name" href="{% url 'transactions:detail' transaction.pk %}">{{ transaction.description|default:transaction.category.name|default:'Transaction' }}</a></td>
+                        <td><span class="type-pill type-{{ transaction.kind }}">{{ transaction.get_kind_display }}</span></td>
+                        <td><span class="category-pill">{{ transaction.category.name|default:'Uncategorized' }}</span></td>
+                        <td>{{ transaction.subcategory|default:'—' }}</td>
+                        <td class="muted-cell">{{ transaction.date|date:'j M Y' }}</td>
+                        <td>{{ transaction.get_payment_method_display|default:'—' }}</td>
+                        <td class="amount-column {% if transaction.kind == 'expense' %}amount-expense{% else %}amount-investment{% endif %}">{% if transaction.kind == 'expense' %}−{% elif transaction.kind == 'income' %}+{% endif %}{{ transaction.amount|inr }}</td>
+                        <td><a class="row-action" href="{% url 'transactions:detail' transaction.pk %}">View</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if page_obj.has_other_pages %}
+            <nav class="pagination-row" aria-label="Transaction pages">
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                <div class="pagination-actions">
+                    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}{% if pagination_query %}&amp;{{ pagination_query }}{% endif %}">Previous</a>{% else %}<span class="disabled">Previous</span>{% endif %}
+                    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}{% if pagination_query %}&amp;{{ pagination_query }}{% endif %}">Next</a>{% else %}<span class="disabled">Next</span>{% endif %}
+                </div>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="large-empty-state">
+            <span class="empty-icon empty-icon-large"><svg class="icon"><use href="#icon-empty"></use></svg></span>
+            <h3>{% if filter_form.is_bound %}No matching records{% else %}No {{ page_title|lower }} yet{% endif %}</h3>
+            <p>{% if filter_form.is_bound %}Try another search or clear one of the filters.{% else %}Records you add will appear here and update your dashboard automatically.{% endif %}</p>
+            <div class="empty-actions"><a class="button button-soft" href="{% url 'transactions:income_create' %}">Add income</a><a class="button button-primary" href="{% url 'transactions:expense_create' %}">Add expense</a></div>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

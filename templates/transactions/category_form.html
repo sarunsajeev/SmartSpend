@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_heading }} · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">YOUR CATEGORIES</span><h2>{{ page_heading }}</h2><p>Choose whether this label is for income, expenses, or investments.</p></div></section>
+<section class="panel form-panel"><form method="post" class="stacked-form" novalidate>{% csrf_token %}{% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}{% for field in form %}<div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>{% endfor %}<div class="form-actions"><a class="button button-secondary" href="{% url 'transactions:categories' %}">Cancel</a><button class="button button-primary" type="submit">Save category</button></div></form></section>
+{% endblock %}

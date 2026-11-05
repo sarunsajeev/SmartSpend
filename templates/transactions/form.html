@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_title }} · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">{{ kind|title|default:'Transaction' }}</span><h2>{{ page_title }}</h2><p>Amounts must be positive. The record will belong to your account.</p></div></section>
+<section class="panel form-panel">
+    <form method="post" class="stacked-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+        <div class="form-grid">
+            {% for field in form %}
+                <div class="form-field {% if field.name == 'description' %}field-wide{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<small class="form-help">{{ field.help_text|safe }}</small>{% endif %}
+                    {% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="form-actions"><a class="button button-secondary" href="{% if kind == 'income' %}{% url 'transactions:income' %}{% else %}{% url 'transactions:list' %}{% endif %}">Cancel</a><button class="button button-primary" type="submit">{% if transaction %}Save changes{% else %}Save record{% endif %}</button></div>
+    </form>
+</section>
+{% endblock %}

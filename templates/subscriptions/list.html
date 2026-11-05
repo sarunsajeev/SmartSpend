@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load smartspend %}
+
+{% block title %}Bills &amp; Subscriptions · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro">
+    <div><span class="section-kicker">RECURRING COSTS</span><h2>Bills &amp; subscriptions</h2><p>Keep upcoming renewals visible and easy to review.</p></div>
+    <a class="button button-primary" href="{% url 'subscriptions:create' %}">Add subscription</a>
+</section>
+<section class="panel list-panel">
+    <div class="panel-heading panel-heading-row list-panel-heading"><div><span class="section-kicker">YOUR SERVICES</span><h2>Tracked subscriptions</h2><p>Renewal details saved to your account.</p></div><span class="record-count">{{ subscriptions|length }} record{{ subscriptions|length|pluralize }}</span></div>
+    {% if subscriptions %}
+        <div class="table-scroll"><table class="spend-table full-table">
+            <thead><tr><th scope="col">Service</th><th scope="col">Billing cycle</th><th scope="col">Next renewal</th><th scope="col" class="amount-column">Amount</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+            <tbody>{% for subscription in subscriptions %}<tr>
+                <td><span class="service-cell"><span class="bill-logo bill-logo-{{ forloop.counter }}">{{ subscription.name|first|upper }}</span><span class="transaction-name">{{ subscription.name }}</span></span></td>
+                <td>{{ subscription.get_billing_cycle_display }}</td><td class="muted-cell">{{ subscription.next_renewal_date|date:'j M Y' }}</td>
+                <td class="amount-column">{{ subscription.amount|inr }}</td>
+                <td><span class="status-pill {% if subscription.is_active %}status-active{% else %}status-paused{% endif %}">{% if subscription.is_active %}Active{% else %}Paused{% endif %}</span></td>
+                <td class="row-actions"><a class="row-action" href="{% url 'subscriptions:update' subscription.pk %}">Edit</a><a class="row-action row-action-danger" href="{% url 'subscriptions:delete' subscription.pk %}">Delete</a></td>
+            </tr>{% endfor %}</tbody>
+        </table></div>
+    {% else %}
+        <div class="large-empty-state"><span class="empty-icon empty-icon-large"><svg class="icon"><use href="#icon-card"></use></svg></span><h3>No subscriptions tracked</h3><p>Add a bill or recurring service to see upcoming renewals here.</p><a class="button button-primary" href="{% url 'subscriptions:create' %}">Add your first subscription</a></div>
+    {% endif %}
+</section>
+{% endblock %}

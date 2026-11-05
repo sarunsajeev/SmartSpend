@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load smartspend %}
+
+{% block title %}Delete goal · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">CONFIRM CHANGE</span><h2>Delete savings goal</h2><p>This removes the goal from your account.</p></div></section>
+<section class="panel confirm-panel"><span class="summary-icon icon-amber"><svg class="icon"><use href="#icon-help"></use></svg></span><h3>{{ goal.name }}</h3><p>{{ goal.current_amount|inr }} saved of {{ goal.target_amount|inr }}</p><form method="post" class="form-actions">{% csrf_token %}<a class="button button-secondary" href="{% url 'budgets:goals' %}">Keep goal</a><button class="button button-danger" type="submit">Delete goal</button></form></section>
+{% endblock %}

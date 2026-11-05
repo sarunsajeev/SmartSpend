@@ -1,0 +1,78 @@
+<div class="sidebar-backdrop" data-sidebar-close></div>
+<aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="brand-row">
+        <a class="brand" href="{% url 'dashboard:home' %}">
+            <span class="brand-mark"><svg class="icon"><use href="#icon-mark"></use></svg></span>
+            <span class="brand-copy"><strong>SmartSpend</strong><small>PERSONAL FINANCE</small></span>
+        </a>
+        <button class="icon-button sidebar-close" type="button" data-sidebar-close aria-label="Close navigation">
+            <svg class="icon"><use href="#icon-close"></use></svg>
+        </button>
+    </div>
+
+    <div class="sidebar-label">GENERAL</div>
+    <nav class="sidebar-nav">
+        <a class="nav-link {% if request.resolver_match.namespace == 'dashboard' and request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:home' %}">
+            <svg class="icon"><use href="#icon-dashboard"></use></svg><span>Dashboard</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'transactions' and request.resolver_match.url_name == 'list' %}active{% endif %}" href="{% url 'transactions:list' %}">
+            <svg class="icon"><use href="#icon-receipt"></use></svg><span>All Expenses</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'subscriptions' %}active{% endif %}" href="{% url 'subscriptions:list' %}">
+            <svg class="icon"><use href="#icon-card"></use></svg><span>Bill &amp; Subscription</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'transactions' and request.resolver_match.url_name == 'investments' %}active{% endif %}" href="{% url 'transactions:investments' %}">
+            <svg class="icon"><use href="#icon-trend"></use></svg><span>Investment</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'dashboard' and request.resolver_match.url_name == 'cards' %}active{% endif %}" href="{% url 'dashboard:cards' %}">
+            <svg class="icon"><use href="#icon-card"></use></svg><span>Card</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'budgets' %}active{% endif %}" href="{% url 'budgets:goals' %}">
+            <svg class="icon"><use href="#icon-target"></use></svg><span>Goals</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-label sidebar-label-spaced">TOOLS</div>
+    <nav class="sidebar-nav">
+        <a class="nav-link {% if request.resolver_match.namespace == 'dashboard' and request.resolver_match.url_name == 'insight' %}active{% endif %}" href="{% url 'dashboard:insight' %}">
+            <svg class="icon"><use href="#icon-trend"></use></svg><span>Insight</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'dashboard' and request.resolver_match.url_name == 'analytics' %}active{% endif %}" href="{% url 'dashboard:analytics' %}">
+            <svg class="icon"><use href="#icon-chart"></use></svg><span>Analytics</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.namespace == 'reports' %}active{% endif %}" href="{% url 'reports:index' %}">
+            <svg class="icon"><use href="#icon-receipt"></use></svg><span>Statements</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-label sidebar-label-spaced">OTHER</div>
+    <nav class="sidebar-nav">
+        <a class="nav-link {% if request.resolver_match.namespace == 'accounts' and request.resolver_match.url_name == 'profile' or request.resolver_match.url_name == 'profile_edit' or request.resolver_match.url_name == 'password_change' %}active{% endif %}" href="{% url 'accounts:profile' %}">
+            <svg class="icon"><use href="#icon-settings"></use></svg><span>Settings</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'help' %}active{% endif %}" href="{% url 'dashboard:help' %}">
+            <svg class="icon"><use href="#icon-help"></use></svg><span>Help Center</span>
+        </a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'support' %}active{% endif %}" href="{% url 'dashboard:support' %}">
+            <svg class="icon"><use href="#icon-support"></use></svg><span>Support</span>
+        </a>
+        {% if request.user.is_staff %}
+        <a class="nav-link" href="{% url 'admin:index' %}">
+            <svg class="icon"><use href="#icon-settings"></use></svg><span>Administration</span>
+        </a>
+        {% endif %}
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-note">
+        <span class="sidebar-note-orb"></span>
+        <strong>One clear view.</strong>
+        <p>Build steady money habits, one day at a time.</p>
+    </div>
+    <form class="sidebar-logout" method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button class="nav-link logout-link" type="submit">
+            <svg class="icon"><use href="#icon-logout"></use></svg><span>Logout</span>
+        </button>
+    </form>
+</aside>

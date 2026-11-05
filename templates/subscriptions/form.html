@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_heading }} · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">RECURRING COSTS</span><h2>{{ page_heading }}</h2><p>Enter the amount for one billing cycle and the next renewal date.</p></div></section>
+<section class="panel form-panel"><form method="post" class="stacked-form" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="form-grid">{% for field in form %}<div class="form-field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>{% endfor %}</div>
+    <div class="form-actions"><a class="button button-secondary" href="{% url 'subscriptions:list' %}">Cancel</a><button class="button button-primary" type="submit">Save subscription</button></div>
+</form></section>
+{% endblock %}

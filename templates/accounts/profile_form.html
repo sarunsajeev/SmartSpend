@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit profile · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">ACCOUNT</span><h2>Edit profile</h2><p>Update the name and email connected to your account.</p></div></section>
+<section class="panel form-panel">
+    <form method="post" class="stacked-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}<div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>{% endfor %}
+        <div class="form-actions"><a class="button button-secondary" href="{% url 'accounts:profile' %}">Cancel</a><button class="button button-primary" type="submit">Save profile</button></div>
+    </form>
+</section>
+{% endblock %}

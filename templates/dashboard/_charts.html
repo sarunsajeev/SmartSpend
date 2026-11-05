@@ -1,0 +1,51 @@
+<section class="dashboard-grid chart-grid" aria-label="Expense charts">
+    <article class="panel chart-panel monthly-panel">
+        <div class="panel-heading">
+            <div>
+                <span class="section-kicker">SPENDING TREND</span>
+                <h2>Monthly expenses</h2>
+                <p>Six-month view of your recorded spending</p>
+            </div>
+            <span class="panel-period">Last 6 months</span>
+        </div>
+        <div class="chart-wrap chart-wrap-bar">
+            {% if has_monthly_expenses %}
+                <canvas id="monthlyExpensesChart" aria-label="Bar chart of monthly expenses" role="img"></canvas>
+            {% else %}
+                <div class="chart-empty-state">
+                    <span class="empty-icon"><svg class="icon"><use href="#icon-chart"></use></svg></span>
+                    <strong>Your spending chart will appear here</strong>
+                    <p>Add expense records to see your month-by-month trend.</p>
+                </div>
+            {% endif %}
+        </div>
+    </article>
+
+    <article class="panel chart-panel category-panel">
+        <div class="panel-heading">
+            <div>
+                <span class="section-kicker">WHERE IT GOES</span>
+                <h2>Top category</h2>
+                <p>{{ month_label }} breakdown</p>
+            </div>
+            <span class="round-accent"><svg class="icon"><use href="#icon-receipt"></use></svg></span>
+        </div>
+        <div class="chart-wrap chart-wrap-doughnut">
+            {% if has_category_expenses %}
+                <canvas id="expenseCategoryChart" aria-label="Doughnut chart of expenses by category" role="img"></canvas>
+            {% else %}
+                <div class="chart-empty-state compact-empty">
+                    <span class="empty-icon"><svg class="icon"><use href="#icon-empty"></use></svg></span>
+                    <strong>No category data yet</strong>
+                    <p>This month’s expense categories will show here.</p>
+                </div>
+            {% endif %}
+        </div>
+        {% if has_category_expenses %}
+            <ul class="chart-legend" id="categoryChartLegend" aria-label="Expense categories"></ul>
+        {% endif %}
+    </article>
+</section>
+
+{{ monthly_chart|json_script:'monthly-chart-data' }}
+{{ category_chart|json_script:'category-chart-data' }}

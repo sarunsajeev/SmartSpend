@@ -1,0 +1,30 @@
+<header class="topbar">
+    <button class="icon-button mobile-menu-button" type="button" data-sidebar-open aria-label="Open navigation" aria-expanded="false">
+        <svg class="icon"><use href="#icon-menu"></use></svg>
+    </button>
+    <div class="topbar-copy">
+        <h1>{{ page_heading|default:'SmartSpend' }}{% if show_greeting_wave %} <span class="greeting-wave" aria-hidden="true">👋</span>{% endif %}</h1>
+        <p>{{ topbar_subtitle|default:'Your personal finance workspace' }}</p>
+    </div>
+    <div class="topbar-actions">
+        <div class="topbar-date"><svg class="icon"><use href="#icon-calendar"></use></svg><span>{{ now|date:'g:i A' }} <i>|</i> {{ today|date:'j F Y' }} <i>|</i> IST</span></div>
+        <form class="global-search" action="{% url 'transactions:all' %}" method="get" role="search">
+            <svg class="icon"><use href="#icon-search"></use></svg>
+            <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Search expenses" aria-label="Search expenses">
+            <kbd>Ctrl K</kbd>
+        </form>
+        <div class="notification-wrap">
+            <button class="icon-button notification-button" type="button" data-notifications-toggle aria-label="Notifications" aria-expanded="false">
+                <svg class="icon"><use href="#icon-bell"></use></svg>
+            </button>
+            <div class="notification-popover" data-notifications-panel hidden>
+                <strong>You're all caught up</strong>
+                <p>New reminders will appear here.</p>
+            </div>
+        </div>
+        <a class="profile-chip" href="{% url 'accounts:profile' %}" aria-label="Open profile settings">
+            <span class="avatar" aria-hidden="true">{% if request.user.first_name %}{{ request.user.first_name|first|upper }}{% else %}{{ request.user.username|first|upper }}{% endif %}</span>
+            <span class="profile-name">{{ request.user.first_name|default:request.user.username }}</span>
+        </a>
+    </div>
+</header>

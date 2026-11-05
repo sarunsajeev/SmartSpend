@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load smartspend %}
+
+{% block title %}Financial goals · SmartSpend{% endblock %}
+
+{% block content %}
+<section class="page-intro"><div><span class="section-kicker">YOUR MILESTONES</span><h2>Financial goals</h2><p>Track savings progress and planned targets in one place.</p></div><a class="button button-primary" href="{% url 'budgets:create' %}">Add a goal</a></section>
+{% if goals %}
+    <section class="goal-grid">
+    {% for goal in goals %}
+        <article class="panel goal-card">
+            <div class="goal-card-head"><span class="summary-icon icon-amber"><svg class="icon"><use href="#icon-target"></use></svg></span><span class="status-pill {% if goal.is_active %}status-active{% else %}status-paused{% endif %}">{% if goal.is_active %}Active{% else %}Paused{% endif %}</span></div>
+            <h3>{{ goal.name }}</h3><p>{{ goal.current_amount|inr }} saved of {{ goal.target_amount|inr }}</p>
+            <div class="progress-track goal-progress" role="progressbar" aria-label="{{ goal.name }} progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ goal.progress_percentage }}"><span style="width: {{ goal.progress_percentage }}%"></span></div>
+            <div class="goal-progress-meta"><span>{{ goal.progress_percentage }}% complete</span><strong>{% if goal.target_date %}{{ goal.target_date|date:'j M Y' }}{% else %}No target date{% endif %}</strong></div>
+            <div class="record-actions"><a class="row-action" href="{% url 'budgets:update' goal.pk %}">Edit goal</a><a class="row-action row-action-danger" href="{% url 'budgets:delete' goal.pk %}">Delete</a></div>
+        </article>
+    {% endfor %}
+    </section>
+{% else %}
+    <section class="panel"><div class="large-empty-state"><span class="empty-icon empty-icon-large"><svg class="icon"><use href="#icon-target"></use></svg></span><h3>No goals yet</h3><p>Add a savings goal to track the amount you want to reach.</p><a class="button button-primary" href="{% url 'budgets:create' %}">Create your first goal</a></div></section>
+{% endif %}
+{% endblock %}
